@@ -1,0 +1,26 @@
+pipeline {
+    agent any
+
+    stages {
+        stage ('SCM') {
+            steps {
+                git branch: 'main', url: 'https://github.com/pythoncpp/jenkins-html-demo.git'
+            }
+        }
+        stage ('docker login') {
+            steps {
+                sh 'echo <token> | /usr/bin/docker login -u <username> --password-stdin'
+            }
+        }
+        stage ('docker build image') {
+            steps {
+                sh '/usr/bin/docker image build -t <username>/mywebsite .'
+            }
+        }
+        stage ('docker push image') {
+            steps {
+                sh '/usr/bin/docker image push <username>/mywebsite'
+            }
+        }
+    }
+}
